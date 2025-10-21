@@ -158,11 +158,6 @@ export default function LoginPage() {
             </p>
           </div>
         </div>
-
-        {/* Info text */}
-        <p className="text-center text-sm text-neutral-500 mt-6">
-          Default credentials: admin123
-        </p>
       </motion.div>
     </div>
   );
