@@ -85,40 +85,48 @@ export default function DocsPage() {
 
       {/* Navigation */}
       <nav className="border-b border-neutral-800 bg-[#0A0A0F]/80 backdrop-blur-xl sticky top-0 z-50">
-        <div className="container mx-auto px-6 py-4">
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
           <div className="flex justify-between items-center">
-            <Link href="/dashboard" className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-yellow-500 rounded-lg flex items-center justify-center">
-                <Database className="w-5 h-5 text-black" />
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 sm:gap-3"
+            >
+              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-yellow-500 rounded-lg flex items-center justify-center">
+                <Database className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
               </div>
-              <span className="text-lg font-semibold">Kairoo Storage</span>
+              <span className="text-base sm:text-lg font-semibold hidden xs:block">
+                Kairoo Storage
+              </span>
             </Link>
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 sm:gap-3">
               <Link href="/dashboard">
                 <Button
                   variant="ghost"
-                  className="text-neutral-400 hover:text-white hover:bg-neutral-800"
+                  size="sm"
+                  className="text-neutral-400 hover:text-white hover:bg-neutral-800 px-2 sm:px-4"
                 >
-                  <Database className="w-4 h-4 mr-2" />
-                  Dashboard
+                  <Database className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Dashboard</span>
                 </Button>
               </Link>
               <Link href="/dashboard/files">
                 <Button
                   variant="ghost"
-                  className="text-neutral-400 hover:text-white hover:bg-neutral-800"
+                  size="sm"
+                  className="text-neutral-400 hover:text-white hover:bg-neutral-800 px-2 sm:px-4"
                 >
-                  <FolderOpen className="w-4 h-4 mr-2" />
-                  Files
+                  <FolderOpen className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Files</span>
                 </Button>
               </Link>
               <Link href="/dashboard/settings">
                 <Button
                   variant="ghost"
-                  className="text-neutral-400 hover:text-white hover:bg-neutral-800"
+                  size="sm"
+                  className="text-neutral-400 hover:text-white hover:bg-neutral-800 px-2 sm:px-4"
                 >
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
+                  <Settings className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Settings</span>
                 </Button>
               </Link>
             </div>
@@ -126,7 +134,7 @@ export default function DocsPage() {
         </div>
       </nav>
 
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="flex gap-8">
           {/* Sidebar */}
           <aside className="hidden lg:block w-64 shrink-0">
