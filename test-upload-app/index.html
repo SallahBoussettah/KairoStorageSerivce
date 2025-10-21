@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kairoo Storage Test App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0A0A0F;
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: #FBBF24;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 24px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: #9CA3AF;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #D1D5DB;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="file"]:focus {
+            outline: none;
+            border-color: #FBBF24;
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+        }
+
+        input[type="file"] {
+            padding: 0.5rem;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: #FBBF24;
+            color: black;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: #F59E0B;
+        }
+
+        button {
+            background: #FBBF24;
+            color: black;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #F59E0B;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            color: #FCA5A5;
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            color: #86EFAC;
+        }
+
+        .uploaded-files {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .file-card {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .file-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-name {
+            font-size: 0.875rem;
+            color: #D1D5DB;
+            word-break: break-all;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-info {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+        }
+
+        .view-btn {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(251, 191, 36, 0.1);
+            color: #FBBF24;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .view-btn:hover {
+            background: rgba(251, 191, 36, 0.2);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.3);
+            border-top-color: black;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .help-text {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+            margin-top: 0.5rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #FBBF24;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #9CA3AF;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📦</div>
+            <h1>Kairoo Storage Test App</h1>
+            <p class="subtitle">Test your file upload API integration</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="uploadCount">0</div>
+                <div class="stat-label">Files Uploaded</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalSize">0 KB</div>
+                <div class="stat-label">Total Size</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 1.5rem;">Upload Configuration</h2>
+            
+            <div id="errorMessage"></div>
+            <div id="successMessage"></div>
+
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="apiKey">API Key</label>
+                    <input 
+                        type="text" 
+                        id="apiKey" 
+                        placeholder="Enter your Kairoo Storage API key"
+                        required
+                    >
+                    <p class="help-text">Get your API key from the Kairoo Storage dashboard</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="fileInput">Select File</label>
+                    <input 
+                        type="file" 
+                        id="fileInput" 
+                        accept="image/*,video/*,.pdf,.doc,.docx,.txt"
+                        required
+                    >
+                    <p class="help-text">Supported: Images, Videos, Documents</p>
+                </div>
+
+                <button type="submit" id="uploadBtn">
+                    Upload File
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 1.5rem;">Uploaded Files</h2>
+            <div id="uploadedFiles" class="uploaded-files">
+                <p style="color: #9CA3AF; text-align: center; grid-column: 1/-1;">
+                    No files uploaded yet. Upload a file to see it here!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:4000';
+        let uploadedFiles = [];
+        let totalSize = 0;
+
+        const uploadForm = document.getElementById('uploadForm');
+        const apiKeyInput = document.getElementById('apiKey');
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const uploadedFilesContainer = document.getElementById('uploadedFiles');
+        const uploadCountEl = document.getElementById('uploadCount');
+        const totalSizeEl = document.getElementById('totalSize');
+
+        // Load saved API key
+        const savedApiKey = localStorage.getItem('kairoo_api_key');
+        if (savedApiKey) {
+            apiKeyInput.value = savedApiKey;
+        }
+
+        // Save API key on change
+        apiKeyInput.addEventListener('change', () => {
+            localStorage.setItem('kairoo_api_key', apiKeyInput.value);
+        });
+
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const apiKey = apiKeyInput.value.trim();
+            const file = fileInput.files[0];
+
+            if (!apiKey || !file) {
+                showError('Please provide both API key and file');
+                return;
+            }
+
+            // Clear messages
+            clearMessages();
+
+            // Disable button and show loading
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<span class="loading"></span>Uploading...';
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const response = await fetch(`${API_BASE_URL}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    const errorMsg = data.details || data.error || 'Upload failed';
+                    throw new Error(errorMsg);
+                }
+
+                // Success!
+                showSuccess(`File "${data.file.originalName}" uploaded successfully!`);
+                uploadedFiles.unshift(data.file);
+                totalSize += data.file.size;
+                updateStats();
+                renderUploadedFiles();
+                
+                // Reset form
+                fileInput.value = '';
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = 'Upload File';
+            }
+        });
+
+        function showError(message) {
+            errorMessage.innerHTML = `<div class="alert alert-error">${message}</div>`;
+            successMessage.innerHTML = '';
+        }
+
+        function showSuccess(message) {
+            successMessage.innerHTML = `<div class="alert alert-success">${message}</div>`;
+            errorMessage.innerHTML = '';
+        }
+
+        function clearMessages() {
+            errorMessage.innerHTML = '';
+            successMessage.innerHTML = '';
+        }
+
+        function updateStats() {
+            uploadCountEl.textContent = uploadedFiles.length;
+            totalSizeEl.textContent = formatFileSize(totalSize);
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(2) + ' KB';
+            return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+        }
+
+        function renderUploadedFiles() {
+            if (uploadedFiles.length === 0) {
+                uploadedFilesContainer.innerHTML = `
+                    <p style="color: #9CA3AF; text-align: center; grid-column: 1/-1;">
+                        No files uploaded yet. Upload a file to see it here!
+                    </p>
+                `;
+                return;
+            }
+
+            uploadedFilesContainer.innerHTML = uploadedFiles.map(file => {
+                const isImage = file.type === 'image';
+                
+                return `
+                    <div class="file-card">
+                        ${isImage ? `<img src="${file.url}" alt="${file.originalName}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22150%22%3E%3Crect fill=%22%23374151%22 width=%22200%22 height=%22150%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239CA3AF%22 font-family=%22sans-serif%22%3EImage%3C/text%3E%3C/svg%3E'">` : `
+                            <div style="width: 100%; height: 150px; background: rgba(251, 191, 36, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.5rem;">
+                                <span style="font-size: 3rem;">${file.type === 'video' ? '🎥' : '📄'}</span>
+                            </div>
+                        `}
+                        <div class="file-name">${file.originalName}</div>
+                        <div class="file-info">
+                            ${file.type} • ${formatFileSize(file.size)}
+                        </div>
+                        <a href="${file.url}" target="_blank" class="view-btn">
+                            View File
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initial render
+        renderUploadedFiles();
+    </script>
+</body>
+</html>
