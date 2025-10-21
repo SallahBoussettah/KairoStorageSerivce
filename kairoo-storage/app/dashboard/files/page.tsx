@@ -16,6 +16,7 @@ import {
   FolderOpen,
   LogOut,
   X,
+  Settings,
 } from "lucide-react";
 
 interface Project {
@@ -204,6 +205,15 @@ export default function FilesPage() {
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   Docs
+                </Button>
+              </Link>
+              <Link href="/dashboard/settings">
+                <Button
+                  variant="ghost"
+                  className="text-neutral-400 hover:text-white hover:bg-neutral-800"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Settings
                 </Button>
               </Link>
               <Button

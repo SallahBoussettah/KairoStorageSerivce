@@ -16,6 +16,8 @@ import {
   Key,
   Shield,
   Zap,
+  FolderOpen,
+  Settings,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -106,8 +108,17 @@ export default function DocsPage() {
                   variant="ghost"
                   className="text-neutral-400 hover:text-white hover:bg-neutral-800"
                 >
-                  <FileText className="w-4 h-4 mr-2" />
+                  <FolderOpen className="w-4 h-4 mr-2" />
                   Files
+                </Button>
+              </Link>
+              <Link href="/dashboard/settings">
+                <Button
+                  variant="ghost"
+                  className="text-neutral-400 hover:text-white hover:bg-neutral-800"
+                >
+                  <Settings className="w-4 h-4 mr-2" />
+                  Settings
                 </Button>
               </Link>
             </div>
