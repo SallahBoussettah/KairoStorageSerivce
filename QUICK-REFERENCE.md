@@ -41,7 +41,7 @@ curl https://app.kairoo.me/api/v1/files \
 ### Delete File
 
 ```bash
-curl -X DELETE https://uploads.kairoo.me/files/123 \
+curl -X DELETE https://app.kairoo.me/api/v1/files/123 \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
