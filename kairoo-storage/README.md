@@ -1,228 +1,302 @@
-# Kairoo Storage Service
+# Kairoo Storage Dashboard
 
-A serverless full-stack file storage service built with Next.js, PostgreSQL, and Drizzle ORM.
+Next.js 15 dashboard and management interface for Kairoo Storage service.
 
-## 🚀 Quick Start
+## 🌐 Live URL
+
+**Production**: [https://app.kairoo.me](https://app.kairoo.me)
+
+## 📋 Overview
+
+This is the frontend dashboard deployed on Vercel that provides:
+
+- 🎨 **Landing Page** - Marketing and feature showcase
+- 📊 **Dashboard** - Project management and analytics
+- 📁 **File Browser** - View and manage uploaded files
+- 📚 **Documentation** - Interactive API documentation
+- 🎮 **API Playground** - Test endpoints directly in browser
+- ⚙️ **Settings** - Project configuration and API keys
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **UI Components**: Shadcn/ui
+- **Animations**: Framer Motion
+- **Database**: PostgreSQL (via Drizzle ORM)
+- **Authentication**: JWT
+- **Deployment**: Vercel
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ installed
-- PostgreSQL 18+ installed and running
-- Database `kairoo_storage` created
+- Node.js 18+
+- PostgreSQL database
+- npm or yarn
 
 ### Installation
 
-1. Install dependencies:
-
 ```bash
+# Install dependencies
 npm install
-```
 
-2. Set up environment variables (already configured in `.env.local`):
+# Set up environment variables
+cp .env.example .env.local
 
-```env
-DATABASE_URL=postgresql://postgres:SATOSANb6@localhost:5432/kairoo_storage
-UPLOADS_ROOT=../KairooStorageFiles
-STORAGE_BACKEND_URL=http://localhost:4000
-ADMIN_EMAIL=boussettah.dev@gmail.com
-ADMIN_JWT_SECRET=kairoo_super_secret_jwt_key_2025_change_in_production
-```
-
-3. Push database schema:
-
-```bash
+# Run database migrations
 npm run db:push
-```
 
-4. Seed admin user:
-
-```bash
-npm run seed
-```
-
-This creates an admin account:
-
-- **Email:** boussettah.dev@gmail.com
-- **Password:** admin123
-
-5. Start the development server:
-
-```bash
+# Start development server
 npm run dev
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000)
+Visit: `http://localhost:3000`
 
 ## 📁 Project Structure
 
 ```
 kairoo-storage/
-├── app/
-│   ├── page.tsx              # Landing page
-│   ├── login/                # Admin login
-│   ├── dashboard/            # Dashboard (projects)
-│   └── api/v1/               # API routes
-│       ├── login/            # POST /api/v1/login
-│       └── projects/         # GET/POST /api/v1/projects
-├── lib/
-│   ├── db/
-│   │   ├── index.ts          # Database connection
-│   │   └── schema.ts         # Drizzle schema
-│   ├── auth.ts               # JWT & password utilities
-│   └── file-utils.ts         # File handling utilities
-├── scripts/
-│   ├── seed.ts               # Database seeding
-│   └── test-db.ts            # Database connection test
-└── drizzle.config.ts         # Drizzle configuration
+├── app/                      # Next.js App Router
+│   ├── page.tsx             # Landing page
+│   ├── login/               # Admin login
+│   ├── dashboard/           # Main dashboard
+│   │   ├── page.tsx        # Projects overview
+│   │   ├── docs/           # API documentation
+│   │   ├── files/          # File browser
+│   │   └── settings/       # Settings page
+│   ├── api/                 # API routes
+│   │   └── v1/             # API endpoints
+│   │       ├── upload/     # Upload proxy
+│   │       ├── files/      # List/delete files
+│   │       └── serve/      # Serve files (dev only)
+│   └── globals.css         # Global styles
+├── components/              # React components
+│   └── ui/                 # Shadcn UI components
+├── lib/                     # Utilities
+│   ├── db/                 # Database
+│   │   ├── index.ts       # Drizzle client
+│   │   └── schema.ts      # Database schema
+│   ├── file-utils.ts      # File handling
+│   └── auth.ts            # Authentication
+├── public/                  # Static assets
+└── middleware.ts           # CORS middleware
 ```
 
-## 🗄️ Database Schema
+## 🔐 Environment Variables
 
-### Tables
+### Development (.env.local)
 
-**admins**
+```env
+# Database
+DATABASE_URL=postgresql://user:pass@localhost:5432/kairoo_storage
 
-- id (serial, primary key)
-- email (varchar, unique)
-- password_hash (text)
-- created_at (timestamp)
+# Storage Backend (local for dev)
+STORAGE_BACKEND_URL=http://localhost:4000
 
-**projects**
+# Admin Authentication
+ADMIN_EMAIL=boussettah.dev@gmail.com
+ADMIN_JWT_SECRET=your_secret_here
 
-- id (serial, primary key)
-- name (varchar, unique)
-- api_key (text, unique)
-- created_at (timestamp)
-- updated_at (timestamp)
+# Environment
+NODE_ENV=development
+```
 
-**files**
+### Production (.env.production)
 
-- id (serial, primary key)
-- project_id (integer, foreign key)
-- filename (varchar)
-- original_name (varchar)
-- mime_type (varchar)
-- size (integer)
-- type (varchar) - 'image', 'video', 'document'
-- path (text)
-- url (text)
-- uploaded_at (timestamp)
+```env
+# Database (Oracle VPS)
+DATABASE_URL=postgresql://user:pass@158.178.204.36:5432/kairoo_storage
 
-## 🔌 API Endpoints
+# Storage Backend (Oracle VPS)
+STORAGE_BACKEND_URL=https://uploads.kairoo.me
+
+# Admin Authentication
+ADMIN_EMAIL=boussettah.dev@gmail.com
+ADMIN_JWT_SECRET=your_production_secret
+
+# Environment
+NODE_ENV=production
+```
+
+## 📡 API Routes
+
+### Upload (Proxy)
+
+`POST /api/v1/upload`
+
+Proxies upload requests to the upload-service on Oracle VPS in production.
+
+### List Files
+
+`GET /api/v1/files?type=image`
+
+Lists files for the authenticated project.
+
+### Delete File
+
+`DELETE /api/v1/files/:id`
+
+Deletes a file and its database record.
+
+### Serve Files (Dev Only)
+
+`GET /api/v1/serve/:projectName/:type/:filename`
+
+Serves files locally during development.
+
+## 🎨 Features
+
+### Landing Page
+
+- Hero section with animations
+- Feature showcase
+- File type support
+- CTA sections
+
+### Dashboard
+
+- Project cards with stats
+- Usage analytics
+- Quick actions
+- Recent files
+
+### File Browser
+
+- Grid/list view
+- Filter by type (images, videos, documents)
+- Search functionality
+- Delete files
+- Copy URLs
+
+### API Documentation
+
+- Interactive playground
+- Code examples (cURL, JavaScript, Python)
+- Request/response samples
+- Authentication guide
+
+### Settings
+
+- Update project details
+- Regenerate API keys
+- Configure file size limits
+- Manage allowed file types
+
+## 🔧 Development Commands
+
+```bash
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
+
+# Run linter
+npm run lint
+
+# Format code
+npm run format
+
+# Database commands
+npm run db:push      # Push schema changes
+npm run db:studio    # Open Drizzle Studio
+```
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
+
+1. Push to GitHub
+2. Import project to Vercel
+3. Add environment variables
+4. Deploy
+
+```bash
+# Or use Vercel CLI
+vercel --prod
+```
+
+### Environment Variables on Vercel
+
+Add these in Vercel dashboard:
+
+- `DATABASE_URL`
+- `STORAGE_BACKEND_URL`
+- `ADMIN_EMAIL`
+- `ADMIN_JWT_SECRET`
+- `NODE_ENV=production`
+
+## 🔍 Key Components
 
 ### Authentication
 
-**POST /api/v1/login**
+- JWT-based admin authentication
+- API key validation for projects
+- Protected routes with middleware
 
-```json
-{
-  "email": "boussettah.dev@gmail.com",
-  "password": "admin123"
-}
-```
+### File Management
 
-Response:
+- Upload proxy to Oracle VPS
+- File listing with filters
+- Delete with cleanup
+- URL generation
 
-```json
-{
-  "success": true,
-  "token": "jwt_token_here",
-  "admin": {
-    "id": 1,
-    "email": "boussettah.dev@gmail.com"
-  }
-}
-```
+### Database Schema
 
-### Projects
+- `projects` - Project configurations
+- `files` - File metadata and URLs
 
-**GET /api/v1/projects**
+## 📊 Performance
 
-- Headers: `Authorization: Bearer <token>`
-- Returns list of all projects
+- Server-side rendering (SSR)
+- Static generation where possible
+- Image optimization
+- Code splitting
+- Edge caching
 
-**POST /api/v1/projects**
-
-- Headers: `Authorization: Bearer <token>`
-- Body: `{ "name": "project-name" }`
-- Creates new project and generates API key
-
-## 🛠️ Available Scripts
-
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run Biome linter
-npm run format       # Format code with Biome
-npm run db:push      # Push schema to database
-npm run db:studio    # Open Drizzle Studio
-npm run seed         # Seed admin user
-```
-
-## 📝 Next Steps
-
-1. ✅ Database setup complete
-2. ✅ Admin authentication working
-3. ✅ Project management working
-4. ✅ Landing page created
-5. ✅ Dashboard created
-
-### To Do:
-
-- [ ] File upload API endpoint
-- [ ] File listing API endpoint
-- [ ] File streaming for videos
-- [ ] File deletion endpoint
-- [ ] Documentation page with API playground
-- [ ] File browser in dashboard
-
-## 🔐 Security Notes
-
-- Change the default admin password after first login
-- Update `ADMIN_JWT_SECRET` in production
-- Never commit `.env.local` to version control
-- API keys are generated securely with random strings
-
-## 📚 Documentation
-
-See the `docs/` folder for detailed guides:
-
-- `local-development-guide.md` - Complete Windows development setup
-- `oracle-production-guide.md` - Production deployment guide
-- `PROJECT-OVERVIEW.md` - Project architecture and roadmap
-
-## 🐛 Troubleshooting
+## 🆘 Troubleshooting
 
 ### Database Connection Issues
 
-Run the test script:
-
 ```bash
-npx tsx scripts/test-db.ts
+# Test connection
+npm run db:studio
 ```
 
-This will verify:
+### Upload Service Connection
 
-- PostgreSQL is running
-- Database exists
-- Credentials are correct
-- Tables are created
+Check `STORAGE_BACKEND_URL` is correct and service is running.
 
-### Common Issues
+### Build Errors
 
-1. **"password authentication failed"**
+```bash
+# Clear cache
+rm -rf .next
+npm run build
+```
 
-   - Check PostgreSQL password in `.env.local`
-   - Verify PostgreSQL is running
+## 📝 Notes
 
-2. **"database does not exist"**
+- In **development**: Files are stored locally and served via `/api/v1/serve`
+- In **production**: Uploads are proxied to Oracle VPS, files served from `uploads.kairoo.me`
+- Database is shared between dashboard and upload-service
+- CORS is configured in middleware for API routes
 
-   - Create database: `CREATE DATABASE kairoo_storage;`
+## 🔗 Related
 
-3. **Port 3000 already in use**
-   - Kill the process or use a different port: `npm run dev -- -p 3001`
+- **Upload Service**: `../upload-service/`
+- **Production API**: `../docs/PRODUCTION-API.md`
+- **Quick Reference**: `../docs/QUICK-REFERENCE.md`
 
-## 📧 Contact
+## 📧 Support
 
-Admin: boussettah.dev@gmail.com
+**Email**: boussettah.dev@gmail.com
+
+---
+
+**Built with Next.js 15 and deployed on Vercel**
