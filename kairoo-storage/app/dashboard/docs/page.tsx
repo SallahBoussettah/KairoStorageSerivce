@@ -378,9 +378,16 @@ export default function DocsPage() {
                     </button>
                     <pre className="bg-black/50 p-4 rounded-lg overflow-x-auto">
                       <code className="text-sm text-neutral-300">
-                        {`curl -X POST https://uploads.kairoo.me/upload \\
+                        {`# Bash/Linux/Mac
+curl -X POST https://uploads.kairoo.me/upload \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
-  -F "file=@image.png"`}
+  -F "file=@image.png"
+
+# PowerShell
+$headers = @{"Authorization"="Bearer YOUR_API_KEY"}
+$form = @{file=Get-Item -Path "image.png"}
+Invoke-WebRequest -Uri "https://uploads.kairoo.me/upload" \`
+  -Method POST -Headers $headers -Form $form`}
                       </code>
                     </pre>
                   </div>
@@ -495,12 +502,20 @@ curl https://app.kairoo.me/api/v1/files?type=image \\
                     </button>
                     <pre className="bg-black/50 p-4 rounded-lg overflow-x-auto">
                       <code className="text-sm text-neutral-300">
-                        {`curl https://app.kairoo.me/api/v1/files \\
+                        {`# Bash/Linux/Mac
+curl https://app.kairoo.me/api/v1/files \\
   -H "Authorization: Bearer YOUR_API_KEY"
 
 # Filter by type
 curl https://app.kairoo.me/api/v1/files?type=image \\
-  -H "Authorization: Bearer YOUR_API_KEY"`}
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# PowerShell
+$headers = @{"Authorization"="Bearer YOUR_API_KEY"}
+Invoke-WebRequest -Uri "https://app.kairoo.me/api/v1/files" -Headers $headers
+
+# PowerShell with filter
+Invoke-WebRequest -Uri "https://app.kairoo.me/api/v1/files?type=image" -Headers $headers`}
                       </code>
                     </pre>
                   </div>
@@ -575,8 +590,14 @@ curl https://app.kairoo.me/api/v1/files?type=image \\
                     </button>
                     <pre className="bg-black/50 p-4 rounded-lg overflow-x-auto">
                       <code className="text-sm text-neutral-300">
-                        {`curl -X DELETE https://uploads.kairoo.me/files/1 \\
-  -H "Authorization: Bearer YOUR_API_KEY"`}
+                        {`# Bash/Linux/Mac
+curl -X DELETE https://uploads.kairoo.me/files/1 \\
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# PowerShell
+Invoke-WebRequest -Uri "https://uploads.kairoo.me/files/1" \`
+  -Method DELETE \`
+  -Headers @{"Authorization"="Bearer YOUR_API_KEY"}`}
                       </code>
                     </pre>
                   </div>
