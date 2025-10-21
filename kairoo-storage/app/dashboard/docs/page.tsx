@@ -135,7 +135,7 @@ export default function DocsPage() {
       </nav>
 
       <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div className="flex gap-8">
+        <div className="flex gap-8 relative">
           {/* Sidebar */}
           <aside className="hidden lg:block w-64 shrink-0">
             <div className="sticky top-24 space-y-1">
@@ -160,17 +160,17 @@ export default function DocsPage() {
           </aside>
 
           {/* Main Content */}
-          <main className="flex-1 max-w-4xl">
+          <main className="flex-1 max-w-4xl w-full">
             {/* Mobile Tabs */}
-            <div className="lg:hidden mb-8 overflow-x-auto">
-              <div className="flex gap-2 pb-2">
+            <div className="lg:hidden mb-6 -mx-4 sm:mx-0">
+              <div className="flex gap-2 px-4 sm:px-0 pb-2 overflow-x-auto scrollbar-hide">
                 {sections.map((section) => (
                   <button
                     key={section.id}
                     onClick={() => setActiveTab(section.id)}
-                    className={`px-4 py-2 rounded-lg whitespace-nowrap text-sm font-medium transition-colors ${
+                    className={`px-3 py-2 rounded-lg whitespace-nowrap text-xs sm:text-sm font-medium transition-colors flex-shrink-0 ${
                       activeTab === section.id
-                        ? "bg-yellow-500/10 text-yellow-500"
+                        ? "bg-yellow-500/10 text-yellow-500 border border-yellow-500/20"
                         : "bg-neutral-800/50 text-neutral-400 hover:text-white"
                     }`}
                   >
@@ -182,18 +182,20 @@ export default function DocsPage() {
 
             {/* Getting Started */}
             {activeTab === "getting-started" && (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
-                  <h1 className="text-4xl font-bold mb-4">Getting Started</h1>
-                  <p className="text-lg text-neutral-400">
+                  <h1 className="text-2xl sm:text-4xl font-bold mb-3 sm:mb-4">
+                    Getting Started
+                  </h1>
+                  <p className="text-base sm:text-lg text-neutral-400">
                     Welcome to Kairoo Storage API documentation. Learn how to
                     integrate file storage into your applications.
                   </p>
                 </div>
 
-                <div className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-8">
-                  <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                    <Zap className="w-6 h-6 text-yellow-500" />
+                <div className="bg-neutral-900/50 border border-neutral-800 rounded-xl sm:rounded-2xl p-4 sm:p-8">
+                  <h2 className="text-xl sm:text-2xl font-semibold mb-4 flex items-center gap-2">
+                    <Zap className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500" />
                     Quick Start
                   </h2>
                   <div className="space-y-4 text-neutral-300">
@@ -256,8 +258,8 @@ export default function DocsPage() {
                 <div className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-8">
                   <h3 className="text-xl font-semibold mb-4">Base URL</h3>
                   <div className="relative">
-                    <code className="block bg-black/50 p-4 rounded-lg text-yellow-500 font-mono text-sm">
-                      http://localhost:3000/api/v1
+                    <code className="block bg-black/50 p-3 sm:p-4 rounded-lg text-yellow-500 font-mono text-xs sm:text-sm overflow-x-auto">
+                      https://app.kairoo.me/api/v1
                     </code>
                   </div>
                 </div>
@@ -360,7 +362,7 @@ export default function DocsPage() {
                     <button
                       onClick={() =>
                         copyCode(
-                          `curl -X POST http://localhost:3000/api/v1/upload \\
+                          `curl -X POST https://uploads.kairoo.me/upload \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -F "file=@image.png"`,
                           "upload-curl"
@@ -376,7 +378,7 @@ export default function DocsPage() {
                     </button>
                     <pre className="bg-black/50 p-4 rounded-lg overflow-x-auto">
                       <code className="text-sm text-neutral-300">
-                        {`curl -X POST http://localhost:3000/api/v1/upload \\
+                        {`curl -X POST https://uploads.kairoo.me/upload \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -F "file=@image.png"`}
                       </code>
@@ -395,7 +397,7 @@ export default function DocsPage() {
     "originalName": "image.png",
     "type": "image",
     "size": 102400,
-    "url": "http://localhost:4000/files/project/images/...",
+    "url": "https://uploads.kairoo.me/files/project/images/...",
     "uploadedAt": "2025-10-21T03:00:00.000Z"
   }
 }`}
@@ -441,7 +443,7 @@ console.log(data.file.url);`,
                         {`const formData = new FormData();
 formData.append('file', fileInput.files[0]);
 
-const response = await fetch('http://localhost:3000/api/v1/upload', {
+const response = await fetch('https://uploads.kairoo.me/upload', {
   method: 'POST',
   headers: {
     'Authorization': 'Bearer YOUR_API_KEY'
@@ -474,11 +476,11 @@ console.log(data.file.url);`}
                     <button
                       onClick={() =>
                         copyCode(
-                          `curl http://localhost:3000/api/v1/files \\
+                          `curl https://app.kairoo.me/api/v1/files \\
   -H "Authorization: Bearer YOUR_API_KEY"
 
 # Filter by type
-curl http://localhost:3000/api/v1/files?type=image \\
+curl https://app.kairoo.me/api/v1/files?type=image \\
   -H "Authorization: Bearer YOUR_API_KEY"`,
                           "list-curl"
                         )
@@ -493,11 +495,11 @@ curl http://localhost:3000/api/v1/files?type=image \\
                     </button>
                     <pre className="bg-black/50 p-4 rounded-lg overflow-x-auto">
                       <code className="text-sm text-neutral-300">
-                        {`curl http://localhost:3000/api/v1/files \\
+                        {`curl https://app.kairoo.me/api/v1/files \\
   -H "Authorization: Bearer YOUR_API_KEY"
 
 # Filter by type
-curl http://localhost:3000/api/v1/files?type=image \\
+curl https://app.kairoo.me/api/v1/files?type=image \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                       </code>
                     </pre>
@@ -530,7 +532,7 @@ curl http://localhost:3000/api/v1/files?type=image \\
       "originalName": "image.png",
       "type": "image",
       "size": 102400,
-      "url": "http://localhost:4000/files/project/images/...",
+      "url": "https://uploads.kairoo.me/files/project/images/...",
       "uploadedAt": "2025-10-21T03:00:00.000Z"
     }
   ]
@@ -558,7 +560,7 @@ curl http://localhost:3000/api/v1/files?type=image \\
                     <button
                       onClick={() =>
                         copyCode(
-                          `curl -X DELETE http://localhost:3000/api/v1/files/1 \\
+                          `curl -X DELETE https://uploads.kairoo.me/files/1 \\
   -H "Authorization: Bearer YOUR_API_KEY"`,
                           "delete-curl"
                         )
@@ -573,7 +575,7 @@ curl http://localhost:3000/api/v1/files?type=image \\
                     </button>
                     <pre className="bg-black/50 p-4 rounded-lg overflow-x-auto">
                       <code className="text-sm text-neutral-300">
-                        {`curl -X DELETE http://localhost:3000/api/v1/files/1 \\
+                        {`curl -X DELETE https://uploads.kairoo.me/files/1 \\
   -H "Authorization: Bearer YOUR_API_KEY"`}
                       </code>
                     </pre>
