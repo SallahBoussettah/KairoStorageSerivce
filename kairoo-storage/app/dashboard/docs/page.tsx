@@ -383,11 +383,16 @@ curl -X POST https://uploads.kairoo.me/upload \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -F "file=@image.png"
 
-# PowerShell
+# PowerShell (requires PowerShell 7+)
 $headers = @{"Authorization"="Bearer YOUR_API_KEY"}
 $form = @{file=Get-Item -Path "image.png"}
 Invoke-WebRequest -Uri "https://uploads.kairoo.me/upload" \`
-  -Method POST -Headers $headers -Form $form`}
+  -Method POST -Headers $headers -Form $form
+
+# PowerShell (Windows PowerShell 5.1)
+curl.exe -X POST https://uploads.kairoo.me/upload \`
+  -H "Authorization: Bearer YOUR_API_KEY" \`
+  -F "file=@image.png"`}
                       </code>
                     </pre>
                   </div>
@@ -575,7 +580,7 @@ Invoke-WebRequest -Uri "https://app.kairoo.me/api/v1/files?type=image" -Headers 
                     <button
                       onClick={() =>
                         copyCode(
-                          `curl -X DELETE https://uploads.kairoo.me/files/1 \\
+                          `curl -X DELETE https://app.kairoo.me/api/v1/files/1 \\
   -H "Authorization: Bearer YOUR_API_KEY"`,
                           "delete-curl"
                         )
@@ -591,13 +596,17 @@ Invoke-WebRequest -Uri "https://app.kairoo.me/api/v1/files?type=image" -Headers 
                     <pre className="bg-black/50 p-4 rounded-lg overflow-x-auto">
                       <code className="text-sm text-neutral-300">
                         {`# Bash/Linux/Mac
-curl -X DELETE https://uploads.kairoo.me/files/1 \\
+curl -X DELETE https://app.kairoo.me/api/v1/files/1 \\
   -H "Authorization: Bearer YOUR_API_KEY"
 
 # PowerShell
-Invoke-WebRequest -Uri "https://uploads.kairoo.me/files/1" \`
-  -Method DELETE \`
-  -Headers @{"Authorization"="Bearer YOUR_API_KEY"}`}
+$headers = @{"Authorization"="Bearer YOUR_API_KEY"}
+Invoke-WebRequest -Uri "https://app.kairoo.me/api/v1/files/1" \`
+  -Method DELETE -Headers $headers
+
+# Windows PowerShell 5.1
+curl.exe -X DELETE https://app.kairoo.me/api/v1/files/1 \`
+  -H "Authorization: Bearer YOUR_API_KEY"`}
                       </code>
                     </pre>
                   </div>
