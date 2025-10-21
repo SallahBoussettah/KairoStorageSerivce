@@ -121,22 +121,33 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="grid grid-cols-3 gap-8 mt-20 max-w-3xl mx-auto"
+            className="grid grid-cols-3 gap-3 sm:gap-8 mt-20 max-w-3xl mx-auto px-2 sm:px-0"
           >
             {[
-              { value: "99.9%", label: "Uptime" },
-              { value: "<100ms", label: "Response Time" },
-              { value: "Unlimited", label: "Storage" },
+              { value: "99.9%", mobileValue: "99.9%", label: "Uptime" },
+              {
+                value: "<100ms",
+                mobileValue: "<100ms",
+                label: "Response Time",
+                mobileLabel: "Speed",
+              },
+              { value: "Unlimited", mobileValue: "∞", label: "Storage" },
             ].map((stat, i) => (
               <div
                 key={i}
-                className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 hover:border-neutral-700 transition-colors"
+                className="bg-neutral-900/50 border border-neutral-800 rounded-xl sm:rounded-2xl p-3 sm:p-6 hover:border-neutral-700 transition-colors flex flex-col items-center justify-center text-center"
               >
-                <div className="text-4xl font-bold text-yellow-500 mb-2">
-                  {stat.value}
+                <div className="text-xl sm:text-4xl font-bold text-yellow-500 mb-1 sm:mb-2">
+                  <span className="hidden sm:inline">{stat.value}</span>
+                  <span className="sm:hidden">
+                    {stat.mobileValue || stat.value}
+                  </span>
                 </div>
-                <div className="text-sm text-neutral-500 uppercase tracking-wider">
-                  {stat.label}
+                <div className="text-[10px] sm:text-sm text-neutral-500 uppercase tracking-wider">
+                  <span className="hidden sm:inline">{stat.label}</span>
+                  <span className="sm:hidden">
+                    {stat.mobileLabel || stat.label}
+                  </span>
                 </div>
               </div>
             ))}
