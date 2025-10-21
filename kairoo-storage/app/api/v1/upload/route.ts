@@ -46,6 +46,44 @@ export async function POST(request: NextRequest) {
       return errorResponse;
     }
 
+    // In production, proxy the upload to the upload-service
+    const isDevelopment = process.env.NODE_ENV === "development";
+
+    if (!isDevelopment) {
+      // Forward the request to the upload-service
+      const uploadServiceUrl =
+        process.env.STORAGE_BACKEND_URL || "https://uploads.kairoo.me";
+
+      try {
+        const formData = await request.formData();
+
+        const uploadResponse = await fetch(`${uploadServiceUrl}/upload`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+          },
+          body: formData,
+        });
+
+        const data = await uploadResponse.json();
+
+        const response = NextResponse.json(data, {
+          status: uploadResponse.status,
+        });
+        response.headers.set("Access-Control-Allow-Origin", "*");
+        return response;
+      } catch (error: any) {
+        console.error("Upload service error:", error);
+        const errorResponse = NextResponse.json(
+          { error: "Upload service unavailable", details: error.message },
+          { status: 503 }
+        );
+        errorResponse.headers.set("Access-Control-Allow-Origin", "*");
+        return errorResponse;
+      }
+    }
+
+    // Development mode: handle upload locally
     // Verify API key and get project
     const project = await db.query.projects.findFirst({
       where: eq(projects.apiKey, apiKey),
@@ -124,19 +162,11 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(bytes);
     await writeFile(filePath, buffer);
 
-    // Generate public URL
-    // In development, use local Next.js serve route
-    // In production, use Oracle VPS (uploads.kairoo.me)
-    const isDevelopment = process.env.NODE_ENV === "development";
-    const baseUrl = isDevelopment
-      ? "http://localhost:3000"
-      : process.env.STORAGE_BACKEND_URL || "https://uploads.kairoo.me";
-
-    const publicUrl = isDevelopment
-      ? `${baseUrl}/api/v1/serve/${encodeURIComponent(
-          project.name
-        )}/${fileType}s/${uniqueFilename}`
-      : `${baseUrl}/files/${project.name}/${fileType}s/${uniqueFilename}`;
+    // Generate public URL for development
+    const baseUrl = "http://localhost:3000";
+    const publicUrl = `${baseUrl}/api/v1/serve/${encodeURIComponent(
+      project.name
+    )}/${fileType}s/${uniqueFilename}`;
 
     // Save metadata to database
     const [fileRecord] = await db
